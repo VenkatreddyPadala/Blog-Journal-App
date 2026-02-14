@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: BlogJournal-Application
+  # MongoDb Connection
+  data:
+    mongodb:
+      uri: mongodb+srv://${mongo.username}:${mongo.password}@blogjournal-app.cge1zjp.mongodb.net/journal_db?retryWrites=true&w=majority&appName=BlogJournal-App
+  # File Upload Configuration
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  web:
+    resources:
+      static-locations: file:uploads/
+  # Enable pretty print for JSON responses
+  jackson:
+    serialization:
+      indent-output: true
+      write-dates-as-timestamps: false
+
+file:
+  upload-dir: uploads
+
+# Mongo Credentials
+mongo:
+  username: venkatreddypadalanet_db_user
+  password: GYsuykf6hBIOcRoa
+
+# Logging Configurations
+logging:
+  level:
+    root: INFO
+    com:
+      journal:
+        app: DEBUG
+    org:
+      springframework:
+        security: DEBUG
+        web: DEBUG
+
+server:
+  port: 8099
+  # Error handling
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on-param
+    include-exception: false
+
+jwt:
+  secret: deKF7xIo1CfIKItOKliVpQwclfwlJO97Z2qY8I3zoTxWOO6VFGoAyAwTCQ88BfPs
+  expiration: 86400000
