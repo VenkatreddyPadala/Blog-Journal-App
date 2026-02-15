@@ -1,0 +1,9 @@
+<div class="editor-container">
+  <quill-editor
+    [(ngModel)]="content"
+    [modules]="quillConfig"
+    [disabled]="disabled"
+    (onContentChanged)="onContentChanged($event)"
+    placeholder="Start writing your post..."
+  ></quill-editor>
+</div>

@@ -1,0 +1,44 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a routerLink="/dashboard">
+        <span class="logo">📝 My Journal</span>
+      </a>
+    </div>
+
+    <button class="navbar-toggler" (click)="toggleMenu()" *ngIf="currentUser">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="navbar-menu" [class.active]="menuOpen" *ngIf="currentUser">
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="menuOpen = false">
+        <span class="icon">🏠</span>
+        Dashboard
+      </a>
+      <a routerLink="/posts" routerLinkActive="active" (click)="menuOpen = false">
+        <span class="icon">📄</span>
+        My Posts
+      </a>
+      <a routerLink="/posts/create" routerLinkActive="active" (click)="menuOpen = false">
+        <span class="icon">✏️</span>
+        New Post
+      </a>
+      <a routerLink="/categories" routerLinkActive="active" (click)="menuOpen = false">
+        <span class="icon">🏷️</span>
+        Categories
+      </a>
+    </div>
+
+    <div class="navbar-user" *ngIf="currentUser">
+      <div class="user-info">
+        <span class="user-name">{{ currentUser.username }}</span>
+      </div>
+      <button class="btn-logout" (click)="logout()">
+        <span class="icon">🚪</span>
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>
