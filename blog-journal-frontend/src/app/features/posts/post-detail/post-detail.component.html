@@ -1,0 +1,34 @@
+<p>post-detail works!</p>
+<app-navbar></app-navbar>
+
+<div class="detail-container" *ngIf="post">
+  <div class="detail-header">
+    <button routerLink="/posts" class="btn-back">
+      <span class="icon">←</span> Back to Posts
+    </button>
+    <button (click)="editPost()" class="btn-edit">
+      <span class="icon">✏️</span> Edit
+    </button>
+  </div>
+
+  <article class="post-content">
+    <header class="post-header">
+      <h1>{{ post.title }}</h1>
+      <div class="post-meta">
+        <span class="date">{{ formatDate(post.publishedAt || post.createdAt) }}</span>
+        <span class="badge" [class.badge-success]="post.published && !post.draft" [class.badge-warning]="post.draft">
+          {{ post.draft ? 'Draft' : 'Published' }}
+        </span>
+      </div>
+      <div class="post-tags" *ngIf="post.tags && post.tags.length > 0">
+        <span class="tag" *ngFor="let tag of post.tags">{{ tag }}</span>
+      </div>
+    </header>
+
+    <div class="content" [innerHTML]="sanitizedContent"></div>
+  </article>
+</div>
+
+<div *ngIf="loading" class="loading">
+  <div class="spinner"></div>
+</div>

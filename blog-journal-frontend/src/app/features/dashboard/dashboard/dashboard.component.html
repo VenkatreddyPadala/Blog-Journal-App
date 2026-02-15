@@ -1,0 +1,129 @@
+<app-navbar></app-navbar>
+
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <p>Welcome back! Here's an overview of your journal</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">📝</div>
+      <div class="stat-info">
+        <h3>{{ stats.totalPosts }}</h3>
+        <p>Total Posts</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-info">
+        <h3>{{ stats.publishedPosts }}</h3>
+        <p>Published</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">📄</div>
+      <div class="stat-info">
+        <h3>{{ stats.draftPosts }}</h3>
+        <p>Drafts</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">🏷️</div>
+      <div class="stat-info">
+        <h3>{{ stats.totalCategories }}</h3>
+        <p>Categories</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <button routerLink="/posts/create" class="action-btn primary">
+      <span class="icon">✏️</span>
+      New Post
+    </button>
+    <button routerLink="/posts" class="action-btn">
+      <span class="icon">📚</span>
+      View All Posts
+    </button>
+    <button routerLink="/categories" class="action-btn">
+      <span class="icon">🏷️</span>
+      Manage Categories
+    </button>
+  </div>
+
+  <!-- Recent Posts -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Recent Posts</h2>
+      <a routerLink="/posts" class="view-all">View All →</a>
+    </div>
+
+    <div *ngIf="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Loading posts...</p>
+    </div>
+
+    <div *ngIf="!loading && recentPosts.length === 0" class="empty-state">
+      <div class="empty-icon">📝</div>
+      <h3>No posts yet</h3>
+      <p>Start by creating your first post!</p>
+      <button routerLink="/posts/create" class="btn-primary">Create First Post</button>
+    </div>
+
+    <div class="posts-grid" *ngIf="!loading && recentPosts.length > 0">
+      <div class="post-card" *ngFor="let post of recentPosts">
+        <div class="post-header">
+          <h3>{{ post.title }}</h3>
+          <div class="post-meta">
+            <span class="date">{{ formatDate(post.updatedAt) }}</span>
+            <span class="badge" [class.badge-success]="post.published && !post.draft" [class.badge-warning]="post.draft">
+              {{ post.draft ? 'Draft' : 'Published' }}
+            </span>
+          </div>
+        </div>
+        
+        <div class="post-excerpt">
+          {{ post.excerpt || getExcerpt(post.content) }}
+        </div>
+
+        <div class="post-tags" *ngIf="post.tags && post.tags.length > 0">
+          <span class="tag" *ngFor="let tag of post.tags.slice(0, 3)">{{ tag }}</span>
+        </div>
+
+        <div class="post-actions">
+          <button (click)="viewPost(post.id)" class="btn-view">
+            <span class="icon">👁️</span> View
+          </button>
+          <button (click)="editPost(post.id)" class="btn-edit">
+            <span class="icon">✏️</span> Edit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="section" *ngIf="categories.length > 0">
+    <div class="section-header">
+      <h2>Categories</h2>
+      <a routerLink="/categories" class="view-all">Manage →</a>
+    </div>
+
+    <div class="categories-grid">
+      <div class="category-card" *ngFor="let category of categories.slice(0, 6)" 
+           [style.border-left-color]="category.color || '#667eea'">
+        <div class="category-icon">{{ category.icon || '📁' }}</div>
+        <div class="category-info">
+          <h4>{{ category.name }}</h4>
+          <p>{{ category.postCount }} posts</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

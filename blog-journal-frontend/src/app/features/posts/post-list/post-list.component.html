@@ -1,0 +1,52 @@
+<app-navbar></app-navbar>
+
+<div class="list-container">
+  <div class="list-header">
+    <h1>My Posts</h1>
+    <button routerLink="/posts/create" class="btn-primary">
+      <span class="icon">✏️</span>
+      New Post
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading posts...</p>
+  </div>
+
+  <div *ngIf="!loading && posts.length === 0" class="empty-state">
+    <div class="empty-icon">📝</div>
+    <h3>No posts yet</h3>
+    <p>Start by creating your first post!</p>
+    <button routerLink="/posts/create" class="btn-primary">Create First Post</button>
+  </div>
+
+  <div class="posts-grid" *ngIf="!loading && posts.length > 0">
+    <div class="post-card" *ngFor="let post of posts">
+      <div class="post-header">
+        <h3>{{ post.title }}</h3>
+        <span class="badge" [class.badge-success]="post.published && !post.draft" [class.badge-warning]="post.draft">
+          {{ post.draft ? 'Draft' : 'Published' }}
+        </span>
+      </div>
+      
+      <div class="post-meta">
+        <span class="date">{{ formatDate(post.updatedAt) }}</span>
+      </div>
+
+      <div class="post-excerpt">
+        {{ post.excerpt || getExcerpt(post.content) }}
+      </div>
+
+      <div class="post-tags" *ngIf="post.tags && post.tags.length > 0">
+        <span class="tag" *ngFor="let tag of post.tags.slice(0, 3)">{{ tag }}</span>
+      </div>
+
+      <div class="post-actions">
+        <button (click)="viewPost(post.id)" class="btn-view">👁️ View</button>
+        <button (click)="editPost(post.id)" class="btn-edit">✏️ Edit</button>
+        <button (click)="deletePost(post.id)" class="btn-delete">🗑️ Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

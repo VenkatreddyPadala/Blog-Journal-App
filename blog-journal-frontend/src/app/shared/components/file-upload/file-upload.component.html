@@ -1,0 +1,33 @@
+<div class="upload-container">
+  <div class="upload-area" *ngIf="!preview">
+    <input
+      type="file"
+      id="fileInput"
+      accept="image/*"
+      (change)="onFileSelected($event)"
+      hidden
+    />
+    <label for="fileInput" class="upload-label">
+      <div class="upload-icon">📁</div>
+      <p class="upload-text">Click to select an image</p>
+      <p class="upload-hint">PNG, JPG, GIF up to 10MB</p>
+    </label>
+  </div>
+
+  <div class="preview-area" *ngIf="preview">
+    <img [src]="preview" alt="Preview" class="preview-image" />
+    <div class="preview-actions">
+      <button class="btn-upload" (click)="upload()" [disabled]="uploading">
+        <span *ngIf="!uploading">Upload</span>
+        <span *ngIf="uploading">Uploading...</span>
+      </button>
+      <button class="btn-cancel" (click)="cancel()" [disabled]="uploading">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+</div>

@@ -1,0 +1,136 @@
+<app-navbar></app-navbar>
+
+<div class="edit-container">
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading post...</p>
+  </div>
+
+  <div *ngIf="!loading">
+    <div class="edit-header">
+      <h1>Edit Post</h1>
+      <div class="header-actions">
+        <button routerLink="/posts" class="btn-secondary">
+          <span class="icon">←</span>
+          Back to Posts
+        </button>
+      </div>
+    </div>
+
+    <form [formGroup]="postForm">
+      <div class="form-section">
+        <div class="form-group">
+          <label for="title">Title *</label>
+          <input
+            type="text"
+            id="title"
+            formControlName="title"
+            class="form-control"
+            [class.is-invalid]="f['title'].invalid && f['title'].touched"
+            placeholder="Enter post title"
+          />
+          <div class="invalid-feedback" *ngIf="f['title'].invalid && f['title'].touched">
+            <span *ngIf="f['title'].errors?.['required']">Title is required</span>
+            <span *ngIf="f['title'].errors?.['maxlength']">Title cannot exceed 200 characters</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="excerpt">Excerpt</label>
+          <textarea
+            id="excerpt"
+            formControlName="excerpt"
+            class="form-control"
+            rows="3"
+            placeholder="Short summary of your post (optional)"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Content *</label>
+          <app-rich-text-editor formControlName="content"></app-rich-text-editor>
+          <div class="invalid-feedback" *ngIf="f['content'].invalid && f['content'].touched">
+            Content is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Categories</label>
+          <div class="categories-list" *ngIf="categories.length > 0">
+            <div class="category-checkbox" *ngFor="let category of categories">
+              <input
+                type="checkbox"
+                [id]="'category-' + category.id"
+                [checked]="isCategorySelected(category.id)"
+                (change)="onCategoryChange($event, category.id)"
+              />
+              <label [for]="'category-' + category.id">
+                <span class="category-icon">{{ category.icon || '📁' }}</span>
+                {{ category.name }}
+              </label>
+            </div>
+          </div>
+          <p class="help-text" *ngIf="categories.length === 0">
+            No categories yet. <a routerLink="/categories">Create one</a>
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>Tags</label>
+          <div class="tag-input-container">
+            <input
+              type="text"
+              [(ngModel)]="tagInput"
+              [ngModelOptions]="{standalone: true}"
+              (keyup.enter)="addTag()"
+              class="form-control"
+              placeholder="Add a tag and press Enter"
+            />
+            <button type="button" (click)="addTag()" class="btn-add-tag">Add</button>
+          </div>
+          <div class="tags-list" *ngIf="tags.length > 0">
+            <span class="tag" *ngFor="let tag of tags">
+              {{ tag }}
+              <button type="button" (click)="removeTag(tag)" class="tag-remove">×</button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              formControlName="published"
+            />
+            Published
+          </label>
+        </div>
+      </div>
+
+      <div class="error-message" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          routerLink="/posts"
+          class="btn-cancel"
+          [disabled]="saving"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          (click)="update()"
+          class="btn-save"
+          [disabled]="saving"
+        >
+          <span class="icon">💾</span>
+          <span *ngIf="!saving">Save Changes</span>
+          <span *ngIf="saving">Saving...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
